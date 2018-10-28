@@ -1,22 +1,132 @@
-import { Head } from 'mdx-deck'
+import HeadMeta from './components/head'
+import { CodeSurfer } from "mdx-deck-code-surfer";
+import duotoneDark from "prism-react-renderer/themes/duotoneDark"
+import { Image } from 'mdx-deck'
 
 export { default as theme } from './theme'
 
-<Head>
-  <title>Presentation Title</title>
-</Head>
+<HeadMeta />
 
-# Hello
+# A Guide to Testing Kafka
+
+---
+import Person from './components/person'
+import matt from './assets/my-face.jpg';
+
+# Who's this guy?
+
+<Person
+  avatar={matt} 
+  name="Matt Schroeder" 
+  linkedin="matthewschroeder3"
+  github="msschroe3"
+  title="Senior Consultant, Object Partners" 
+  />
 
 ---
 
-## Edit this file
+## Goals
 
-To create your presentation
+* What types of tests are important to include
+* What approaches are available for the various types of testing
+* Getting started (with Spring Kafka Testing)
+* The elusive “success” measurements for testing
+
+---
+
+<Image src='./assets/1-pyramid.png' />
 
 ```notes
-- Create speaker notes in fenced code blocks
+70/20/10
+https://martinfowler.com/articles/practical-test-pyramid.html
 ```
+---
+
+<Image src='./assets/2-pyramid-unit.png' />
+
+---
+
+<Image src='./assets/3-pyramid-integration.png' />
+
+---
+
+<Image src='./assets/4-pyramid-e2e.png' />
+
+---
+
+## Unit Tests
+
+* fast
+* reliable
+* readable
+* isolate failures
+
+```notes
+- Unit tests are fast. We only need to build a small unit to test it, and the tests also tend to be rather small. In fact, one tenth of a second is considered slow for unit tests. 
+- Unit tests are reliable. Simple systems and small units in general tend to suffer much less from flakiness. Furthermore, best practices for unit testing - in particular practices related to hermetic tests - will remove flakiness entirely. 
+- Unit tests isolate failures. Even if a product contains millions of lines of code, if a unit test fails, you only need to search that small unit under test to find the bug. 
+- hermetic testing - each test should be completely independent and self-sufficient
+```
+
+---
+
+## Writing Testable Code
+
+* Limit Static "Util" Methods
+* Dependency Injection (no `new Object`)
+* Remove Non-Deterministic Behavior
+
+```notes
+https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters
+
+- static code has to be tested along with the sut, so anytime the static code changes it could affect the sut without knowing it
+  - this goes against testing isolated units of code
+- similar to static methods, instantiating objects in a method leaves you no choice but to test that code alongside the sut
+  - this also makes the "unit" tests very hard to write, read, maintain because they start to integrate with more and more things
+- think functional, input->function->output - pumping the same inputs should always produce the same output.
+```
+
+---
+
+<CodeSurfer
+  theme={duotoneDark}
+  code={require("raw-loader!./snippets/spock-sub.groovy")}
+  language="groovy"
+  title="Spock Example"
+  showNumbers
+/>
+
+```notes
+http://spockframework.org/spock/docs/1.2/spock_primer.html
+```
+---
+
+## Integration Tests
+
+Isolation does not test cohesion
+
+```notes
+Unit tests do have one major disadvantage: 
+* even if the units work well in isolation, you do not know if they work well together. But even then, you do not necessarily need end-to-end tests. For that, you can use an integration test. An integration test takes a small group of units, often two units, and tests their behavior as a whole, verifying that they coherently work together.
+```
+---
+
+<CodeSurfer
+  theme={duotoneDark}
+  code={require("raw-loader!./snippets/square.snippet")}
+  language="javascript"
+  title="Snippet from React"
+  notes="Initial Notes"
+  showNumbers
+  steps={[
+    { lines: [ 5 ], notes: "Line" },
+    { lines: [ 4, 5, 6 ], notes: "Lines" },
+    { range: [ 9, 15 ], notes: "Range" },
+    { ranges: [ [ 4, 6 ], [ 11, 14 ] ], notes: "Ranges" },
+    { tokens: { 1: [ 2, 6 ] }, notes: "Tokens" },
+    { range: [ 1, 3, 4 ], notes: "Scroll" }
+  ]}
+/>
 
 ---
 
