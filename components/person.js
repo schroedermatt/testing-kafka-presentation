@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import styled from 'styled-components'
 // import { TwitterIcon, LinkedinIcon, GithubIcon } from "react-icons/fa";
 
@@ -19,12 +19,16 @@ const Avatar = styled.img`
     transform: scale(1.1);
   }
 `
+const Logo = styled.img`
+  height: ${props => props.height ? props.height : "30px"};
+`
 const Name = styled.h2`
   font-size: 40px !important;
 `
 const Title = styled.h3`
   font-size: 32px !important;
-  color: #333 !important;
+  color: #E12B2E !important;
+  margin-bottom: 10px;
 `
 const Social = styled.a`
   display: flex;
@@ -32,8 +36,8 @@ const Social = styled.a`
   justify-content: center;
 
   font-family: League Gothic, Impact, sans-serif !important;
-  font-size: 28px !important;
-  font-weight: 700;
+  font-size: 20px !important;
+  font-weight: 200;
   color: #333 !important;
 
   &.icon {
@@ -41,15 +45,24 @@ const Social = styled.a`
   }
 `
 
-export default function Person({avatar,name,title,twitter,linkedin,github}) {
+export default function Person({
+  avatar,
+  name,
+  title,
+  logo,
+  logoHeight,
+  twitter,
+  linkedin,
+  github
+}) {
   return (
     <PersonWrapper>
       <Avatar src={avatar} />
       <div>
         <Name>{name}</Name>
         <Title>{title}</Title>
-          
-         {github && (
+        <Logo src={logo} height={logoHeight} />
+        {github && (
           <Social
             href={`https://github.com/${github}`}
             target="_blank"
@@ -66,7 +79,7 @@ export default function Person({avatar,name,title,twitter,linkedin,github}) {
             rel="noopener"
           >
             {/* <LinkedinIcon className="icon" color="#1da1f2" / */}
-            >@{linkedin}
+            @{linkedin}
           </Social>
         )}
         {twitter && (

@@ -2,79 +2,119 @@ import HeadMeta from './components/head'
 import { CodeSurfer } from "mdx-deck-code-surfer";
 import duotoneDark from "prism-react-renderer/themes/duotoneDark"
 import { Image } from 'mdx-deck'
+import { HalfImage, ContainImage } from './components/image'
+import { Invert, Split, SplitRight } from 'mdx-deck/layouts'
+import nondeterminism from './assets/nondeterminism.gif'
 
 export { default as theme } from './theme'
 
 <HeadMeta />
 
-# A Guide to Testing Kafka
+# A Guide to Testing 
+# (Kafka)
+
+<img src={nondeterminism} />
 
 ---
 import Person from './components/person'
-import matt from './assets/my-face.jpg';
-
-# Who's this guy?
+import matt from './assets/my-face.jpg'
+import opi from './assets/opi-logo.png'
 
 <Person
   avatar={matt} 
   name="Matt Schroeder" 
+  title="Senior Consultant" 
+  logo={opi}
+  logoHeight="40"
   linkedin="matthewschroeder3"
   github="msschroe3"
-  title="Senior Consultant, Object Partners" 
   />
 
 ---
+import { Appear } from 'mdx-deck'
 
 ## Goals
 
-* What types of tests are important to include
-* What approaches are available for the various types of testing
-* Getting started (with Spring Kafka Testing)
-* The elusive “success” measurements for testing
+<ul style={{ textAlign: 'left' }}>
+  <Appear>
+    <li>Test Value</li>
+    <li>Approaches to Testing</li>
+    <li>Integration Testing Kafka</li>
+    <li>Success Measures</li>
+  </Appear>
+</ul>
 
 ---
 
-<Image src='./assets/1-pyramid.png' />
+<ContainImage src='./assets/1-pyramid.png' />
 
 ```notes
-70/20/10
 https://martinfowler.com/articles/practical-test-pyramid.html
+
+* roughly 70/20/10
 ```
 ---
 
-<Image src='./assets/2-pyramid-unit.png' />
+<ContainImage src='./assets/2-pyramid-unit.png' />
 
 ---
+export default Invert
 
-<Image src='./assets/3-pyramid-integration.png' />
+## Unit tests should be..
 
----
-
-<Image src='./assets/4-pyramid-e2e.png' />
-
----
-
-## Unit Tests
-
-* fast
-* reliable
-* readable
-* isolate failures
+<ul style={{ listStyleType: 'none', color: '#FEE56E'}}>
+  <Appear>
+    <li><h3 style={{ margin: '5px' }}>Fast</h3></li>
+    <li><h3 style={{ margin: '5px' }}>Reliable</h3></li>
+    <li><h3 style={{ margin: '5px' }}>Isolated</h3></li>
+    <li><h3 style={{ margin: '5px' }}>Readable</h3></li>
+  </Appear>
+</ul>
 
 ```notes
 - Unit tests are fast. We only need to build a small unit to test it, and the tests also tend to be rather small. In fact, one tenth of a second is considered slow for unit tests. 
 - Unit tests are reliable. Simple systems and small units in general tend to suffer much less from flakiness. Furthermore, best practices for unit testing - in particular practices related to hermetic tests - will remove flakiness entirely. 
 - Unit tests isolate failures. Even if a product contains millions of lines of code, if a unit test fails, you only need to search that small unit under test to find the bug. 
 - hermetic testing - each test should be completely independent and self-sufficient
+
+**so why is it so hard to get those tests written? writing tests should be the easy part!
+  - the part that makes or breaks your tests is... you guessed it, writing testable code
+```
+---
+
+<CodeSurfer
+  code={require("raw-loader!./snippets/spock-test.groovy")}
+  language="groovy"
+  title="Spock to the Rescue!"
+  showNumbers="true"
+  steps={[
+    { range: [ 1,  23] },
+    { range: [5, 8], notes: "Setup sut with mock(s)"},
+    { range: [10, 22], notes: "A readable test structure"},
+    { range: [11, 12], notes: "Given some condition(s)"},
+    { range: [14, 15], notes: "When an action is performed"},
+    { range: [17, 18], notes: "Then this thing should happen"},
+    { range: [20, 21], notes: "And this should also be true"},
+    { range: [10, 22]}
+  ]}
+/>
+
+```notes
+http://spockframework.org/spock/docs/1.2/spock_primer.html
 ```
 
 ---
+export default SplitRight
 
-## Writing Testable Code
+<HalfImage src='./assets/great.jpg' />
 
-* Limit Static "Util" Methods
-* Dependency Injection (no `new Object`)
-* Remove Non-Deterministic Behavior
+## Testable Code
+
+<ul style={{listStyleType: 'none', color: '#E12B2E'}}>
+  <li>Static "Util" Methods</li>
+  <li>Dependency Injection</li>
+  <li>Non-Deterministic Behavior</li>
+</ul>
 
 ```notes
 https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters
@@ -89,16 +129,27 @@ https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters
 ---
 
 <CodeSurfer
-  theme={duotoneDark}
-  code={require("raw-loader!./snippets/spock-sub.groovy")}
+  code={require("raw-loader!./snippets/untestable.groovy")}
   language="groovy"
-  title="Spock Example"
-  showNumbers
+  title="Example"
+  showNumbers="true"
+  steps={[
+    { range: [ 1,  10] },
+    { lines: [3], notes: "Instantiated class" },
+    { lines: [4], notes: "Nondeterministic functionality" },
+    { lines: [6], notes: "A handy util" },
+    { range: [12, 28], notes: "An alternative"},
+    { range: [14, 19], notes: "Injected services"},
+    { range: [12, 13], notes: "This service is available for injection!"},
+    { tokens: { 21: [ 11 ] }, notes: "Remove nondeterminism" },
+    { lines: [23], notes: "A utility you can mock" }
+  ]}
 />
 
-```notes
-http://spockframework.org/spock/docs/1.2/spock_primer.html
-```
+---
+
+<ContainImage src='./assets/3-pyramid-integration.png' />
+
 ---
 
 ## Integration Tests
@@ -109,24 +160,10 @@ Isolation does not test cohesion
 Unit tests do have one major disadvantage: 
 * even if the units work well in isolation, you do not know if they work well together. But even then, you do not necessarily need end-to-end tests. For that, you can use an integration test. An integration test takes a small group of units, often two units, and tests their behavior as a whole, verifying that they coherently work together.
 ```
+
 ---
 
-<CodeSurfer
-  theme={duotoneDark}
-  code={require("raw-loader!./snippets/square.snippet")}
-  language="javascript"
-  title="Snippet from React"
-  notes="Initial Notes"
-  showNumbers
-  steps={[
-    { lines: [ 5 ], notes: "Line" },
-    { lines: [ 4, 5, 6 ], notes: "Lines" },
-    { range: [ 9, 15 ], notes: "Range" },
-    { ranges: [ [ 4, 6 ], [ 11, 14 ] ], notes: "Ranges" },
-    { tokens: { 1: [ 2, 6 ] }, notes: "Tokens" },
-    { range: [ 1, 3, 4 ], notes: "Scroll" }
-  ]}
-/>
+<ContainImage src='./assets/4-pyramid-e2e.png' />
 
 ---
 
