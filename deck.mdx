@@ -131,7 +131,7 @@ export default SplitRight
 
 <ul style={{listStyleType: 'none', textAlign: 'left', marginLeft: '3em', color: '#E12B2E'}}>
   <li><Emoji symbol={'❌'} label={'red x'} /> Static "Util" Methods</li>
-  <li><Emoji symbol={'❌'} label={'red x'} /> Inline new Object()</li>
+  <li><Emoji symbol={'❌'} label={'red x'} /> Manual Object Instantiation</li>
   <li><Emoji symbol={'❌'} label={'red x'} /> Non-Deterministic Behavior</li>
 </ul>
 
@@ -170,9 +170,7 @@ https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters
 
 ---
 
-## Integration Tests
-
-Isolation does not test cohesion
+> Isolation does not test cohesion
 
 ```notes
 Unit tests do have one major disadvantage: 
@@ -181,8 +179,132 @@ Unit tests do have one major disadvantage:
 
 ---
 
+## todo
+
+Insert diagram here illustrating kafka cluster and client applications
+
+- include boundaries to illustrate unit vs integration
+
+---
+
+
+## Testing Kafka
+* Manual
+* Docker compose
+* Confluent platform
+* Spring Kafka (embedded Kafka)
+
+```notes
+There are a few ways to set up an environment conducive to writing integration tests, and although I’m only highlighting my preferred method there are pros/cons to whichever your team might land on so be sure to have those conversations and understand what you’re committing to before you actually do.
+
+* Docker Compose
+    * this gives you a little bit more realistic environment to test with
+    * Slower to get going without some background
+    * Slower to start up
+* Spring Kafka Testing
+    * Easy to pull in
+    * Like other Spring Projects it gives an opinionated approach that nudges you in the right direction. Some engineers like this, some don’t.
+    * Convenience annotations to get running immediately
+    * Fast, in memory environment that IMO is realistic enough for the scenarios that integration tests should be running. Would I run performance tests against embedded kafka? Probably not.
+* Everything Else
+    * Confluent Ducktape
+    * Cucumber
+    * … testing framework xyz
+```
+---
+
+## todo: Spring Kafka
+
+// add notes on the spring kafka lib
+
+---
+
+## todo: Embedded Kafka
+
+// show what embedded kafka sets up for you
+
+---
+
+## todo: Topology Driver
+
+// talk about diff between embedded & topology driver
+
+---
+
+## todo: Streams App
+
+// insert a slide showing a stream application to be tested
+
+---
+
+## todo: test types
+
+// insert test slides showing different test types
+
+- show topology driver on each stream
+- show inspecting ktable state
+- show end to end with embedded kafka
+---
+
+## todo: mock schema registry
+
+// show mock schema registry setup and point to blog
+
+---
+
 <ContainImage src='./assets/4-pyramid-e2e.png' />
 
+---
+
+## When to go E2E?
+
+<h3>It depends...</h3>
+<ul style={{textAlign: 'left', marginLeft: '3em'}}>
+  <Appear>
+    <li>environment</li>
+    <li>resources</li>
+    <li>app architecture</li>
+    <li>team goals</li>
+    <li>value of E2E</li>
+  </Appear>
+</ul>
+
+
+```notes
+I have found that this portion of the testing ecosystem is so 
+dependent on the application on hand and varies so much that I 
+didn’t dive too deep into this. Also, this layer of testing for a 
+kafka environment starts to look a lot like integration testing++. 
+You just need to figure out the best way to create a more realistic 
+environment to target. Based on infrastructure availability and other 
+needs this can be so different for every org.
+```
+
+---
+
+## Success Measures
+
+<ul style={{listStyleType: 'none', textAlign: 'left', marginLeft: '2em', fontSize: '1.5em'}}>
+  <Appear>
+    <li><Emoji symbol={'🎖️'} label={'participation'} />: Here today &amp; starting tomorrow!</li>
+    <li><Emoji symbol={'🥉'} label={'bronze'} />: Unit tests are flowing</li>
+    <li><Emoji symbol={'🥈'} label={'silver'} />: Integration testing is happening</li>
+    <li><Emoji symbol={'🥇'} label={'gold'} />: You're into the E2E realm</li>
+  </Appear>
+</ul>
+
+```notes
+If you at the SFO summit, there was a great talk on chaos engineering your Kafka cluster and if you’re doing any of that I would also award you this medal.
+
+* Participation Ribbon - You are here today because your team is starting this journey tomorrow!
+* Participation Ribbon - You are here today because your team has no tests. Hey, that’s ok! You get this ribbon for participating and making the effort to learn about improving your process.
+* Bronze - Unit tests are flowing and you're working towards hitting your team's goals.
+* Bronze - The unit tests are flowing, but that’s about it. You’ve hit your coverage mark and feel solid about the dependency of those tests to alert you quickly on any regression.
+* Silver - Integration testing has started and your unit tests are under control.
+* Silver - Integration testing is a part of the pipeline and your team has a suite of isolated “end to end” tests on an embedded broker or a docker-compose env or something similar.
+* Gold - You should give this talk. You've gone full E2E and are bored with testing.
+* Gold - You’re bored with unit and integration testing and put together full on end to end tests that simulate the exact env your code is running. Also, you should have just given this talk.
+```
 ---
 
 <https://github.com/msschroe3/testing-kafka-presentation>
