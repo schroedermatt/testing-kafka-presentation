@@ -61,7 +61,7 @@ export default function Person({
       <div>
         <Name>{name}</Name>
         <Title>{title}</Title>
-        <Logo src={logo} height={logoHeight} />
+        {logo && <Logo src={logo} height={logoHeight} />}
         {github && (
           <Social
             href={`https://github.com/${github}`}

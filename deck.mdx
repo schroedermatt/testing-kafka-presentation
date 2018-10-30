@@ -3,8 +3,8 @@ import { CodeSurfer } from "mdx-deck-code-surfer";
 import duotoneDark from "prism-react-renderer/themes/duotoneDark"
 import { Image } from 'mdx-deck'
 import { HalfImage, ContainImage } from './components/image'
+import Emoji from './components/emoji'
 import { Invert, Split, SplitRight } from 'mdx-deck/layouts'
-import nondeterminism from './assets/nondeterminism.gif'
 
 export { default as theme } from './theme'
 
@@ -12,24 +12,32 @@ export { default as theme } from './theme'
 
 export default Invert
 
-# A Guide to Testing 
-# (Kafka)
-
-<img src={nondeterminism} />
+## A Guide to Testing Kafka
+#### October 29, 2018
 
 ---
 import Person from './components/person'
 import matt from './assets/my-face.jpg'
-import opi from './assets/opi-logo.png'
 
 <Person
   avatar={matt} 
   name="Matt Schroeder" 
-  title="Senior Consultant" 
-  logo={opi}
+  title="Senior Consultant, Object Partners" 
   logoHeight="40"
   linkedin="matthewschroeder3"
   github="msschroe3"
+  />
+
+---
+export default Invert
+
+import nondeterminism from './assets/nondeterminism.gif'
+
+### You know the feeling..
+
+<img 
+  src={nondeterminism} 
+  alt={'struggle bus'} 
   />
 
 ---
@@ -39,13 +47,12 @@ import { Appear } from 'mdx-deck'
 
 <ul style={{ textAlign: 'left' }}>
   <Appear>
-    <li>Test Value</li>
+    <li>Value of Testing</li>
     <li>Approaches to Testing</li>
     <li>Integration Testing Kafka</li>
     <li>Success Measures</li>
   </Appear>
 </ul>
-
 ---
 
 <ContainImage src='./assets/1-pyramid.png' />
@@ -66,10 +73,21 @@ export default Invert
 
 <ul style={{ listStyleType: 'none', color: '#FEE56E'}}>
   <Appear>
-    <li><h3 style={{ margin: '5px' }}>Fast</h3></li>
-    <li><h3 style={{ margin: '5px' }}>Reliable</h3></li>
-    <li><h3 style={{ margin: '5px' }}>Isolated</h3></li>
-    <li><h3 style={{ margin: '5px' }}>Readable</h3></li>
+    <li>
+      <h3 style={{ margin: '5px' }}>
+        Fast <Emoji symbol={'🏃'} label={'fast runner'}/>
+      </h3>
+    </li>
+    <li>
+      <h3 style={{ margin: '5px' }}>
+        Reliable  <Emoji symbol={'💪'} label={'strong and reliable'}/>
+      </h3>
+    </li>
+    <li>
+      <h3 style={{ margin: '5px' }}>
+        Readable <Emoji symbol={'📚'} label={'readable'}/>
+      </h3>
+    </li>
   </Appear>
 </ul>
 
@@ -88,7 +106,6 @@ export default Invert
   code={require("raw-loader!./snippets/spock-test.groovy")}
   language="groovy"
   title="Spock to the Rescue!"
-  showNumbers="true"
   steps={[
     { range: [ 1,  23] },
     { range: [5, 8], notes: "Setup sut with mock(s)"},
@@ -112,10 +129,10 @@ export default SplitRight
 
 ## Testable Code
 
-<ul style={{listStyleType: 'none', color: '#E12B2E'}}>
-  <li>Static "Util" Methods</li>
-  <li>Dependency Injection</li>
-  <li>Non-Deterministic Behavior</li>
+<ul style={{listStyleType: 'none', textAlign: 'left', marginLeft: '5em', color: '#E12B2E'}}>
+  <li><Emoji symbol={'❌'} label={'red x'} /> Static "Util" Methods</li>
+  <li><Emoji symbol={'❌'} label={'red x'} /> Inline new Object()</li>
+  <li><Emoji symbol={'❌'} label={'red x'} /> Non-Deterministic Behavior</li>
 </ul>
 
 ```notes
@@ -134,7 +151,6 @@ https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters
   code={require("raw-loader!./snippets/untestable.groovy")}
   language="groovy"
   title="Example"
-  showNumbers="true"
   steps={[
     { range: [ 1,  10] },
     { lines: [3], notes: "Instantiated class" },
@@ -169,4 +185,4 @@ Unit tests do have one major disadvantage:
 
 ---
 
-<https://github.com/jxnblk/mdx-deck>
+<https://github.com/msschroe3/testing-kafka-presentation>

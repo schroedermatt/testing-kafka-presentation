@@ -1,7 +1,8 @@
 import { condensed as theme } from 'mdx-deck/themes'
 import okaidia from 'react-syntax-highlighter/styles/prism/okaidia'
 import { groovy } from 'react-syntax-highlighter/languages/prism'
-import Provider from './provider';
+import Provider from './provider'
+import duotoneDark from "prism-react-renderer/themes/oceanicNext"
 
 export default {
   ...theme,
@@ -15,6 +16,10 @@ export default {
     languages: {
       groovy: groovy
     }
+  },
+  codeSurfer: {
+    ...duotoneDark,
+    showNumbers: true
   },
   Provider
   // Customize your presentation theme here.
