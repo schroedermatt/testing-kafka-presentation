@@ -1,4 +1,6 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path');
+
 module.exports = {
   module: {
     rules: [
@@ -14,5 +16,10 @@ module.exports = {
         use: ['url-loader']
       }
     ]
-  }
+  },
+  plugins: [
+    new CopyWebpackPlugin([
+      { from: './assets/favicon.ico' }
+    ])
+  ]
 }
