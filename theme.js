@@ -8,7 +8,7 @@ export default {
   ...theme,
   colors: {
     ...theme.colors, // include existing theme colors
-    text: 'black',
+    text: '#282C33',
     background: 'white'
   },
   prism: {
@@ -19,7 +19,8 @@ export default {
   },
   codeSurfer: {
     ...duotoneDark,
-    showNumbers: true
+    showNumbers: true,
+    
   },
   Provider
   // Customize your presentation theme here.

@@ -10,7 +10,7 @@ const Logo = styled.img`
   position: absolute;
   bottom: 8px;
   left: 16px;
-  height: 30px;
+  height: 35px;
 `
 
 export default function Provider({children, length, index}) {

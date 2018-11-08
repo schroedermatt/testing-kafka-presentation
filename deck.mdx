@@ -169,24 +169,33 @@ https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters
 <ContainImage src='./assets/3-pyramid-integration.png' />
 
 ---
+export default Invert
 
-> Isolation does not test cohesion
+> Isolated code might not be cohesive.
 
 ```notes
 Unit tests do have one major disadvantage: 
-* even if the units work well in isolation, you do not know if they work well together. But even then, you do not necessarily need end-to-end tests. For that, you can use an integration test. An integration test takes a small group of units, often two units, and tests their behavior as a whole, verifying that they coherently work together.
+* even if the units work well in isolation, you do not know if they work well together. 
+But even then, you do not necessarily need end-to-end tests. 
+For that, you can use an integration test. An integration test takes a small 
+group of units, often two units, and tests their behavior as a whole, 
+verifying that they coherently work together.
 ```
 
 ---
 
-## todo
-
-Insert diagram here illustrating kafka cluster and client applications
-
-- include boundaries to illustrate unit vs integration
+<ContainImage src='./assets/units.png' />
 
 ---
 
+<ContainImage src='./assets/units-and-integration.png' />
+
+```notes
+Unit testing can be easy given clean boundaries and some of the things we talked
+about in the previous slide. But how do we start to bridge those boundaries and
+test how things work together.
+```
+---
 
 ## Testing Kafka
 * Manual
@@ -219,15 +228,44 @@ There are a few ways to set up an environment conducive to writing integration t
 
 ---
 
-## todo: Embedded Kafka
-
-// show what embedded kafka sets up for you
+<CodeSurfer
+  code={require("raw-loader!./snippets/ktable.java")}
+  language="java"
+  title="Users KTable"
+  steps={[
+    { range: [ 1,  16] },
+    { range: [5, 6], notes: "Look familiar? Inject instead of instantiate"},
+    { range: [8, 14], notes: "Records from user-updates go into users ktable"}
+  ]}
+/>
 
 ---
 
-## todo: Topology Driver
+<CodeSurfer
+  code={require("raw-loader!./snippets/ktablespec.groovy")}
+  language="groovy"
+  title="Users KTable Spec - Topology Driver"
+  steps={[
+    { range: [ 1,  29] },
+    { range: [8, 14], notes: "Configure a serde utilizing the MockSchemaRegistryClient"},
+    { range: [16, 19], notes: "Setup a record factory for tests to use"},
+    { range: [21, 29], notes: "Configure StreamBuilder and TopologyTestDriver"},
+    { range: [32, 56], notes: "Test 1: Published record ends up in ktable"},
+    { range: [33, 45] },
+    { range: [47, 48] },
+    { range: [50, 55] },
+    { range: [58, 85], notes: "Test 2: Update an existing ktable entry"},
+    { range: [59, 67] },
+    { range: [69, 78] },
+    { range: [80, 84] }
+  ]}
+/>
 
-// talk about diff between embedded & topology driver
+---
+
+## todo: Embedded Kafka
+
+// show what embedded kafka sets up for you
 
 ---
 
