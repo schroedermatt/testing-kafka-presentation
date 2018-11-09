@@ -199,9 +199,9 @@ test how things work together.
 
 ## Testing Kafka
 * Manual
-* Docker compose
-* Confluent platform
-* Spring Kafka (embedded Kafka)
+* Docker Compose / Confluent Platform
+* Kafka Streams Test Utils
+* Spring Kafka Test
 
 ```notes
 There are a few ways to set up an environment conducive to writing integration tests, and although I’m only highlighting my preferred method there are pros/cons to whichever your team might land on so be sure to have those conversations and understand what you’re committing to before you actually do.
@@ -220,11 +220,29 @@ There are a few ways to set up an environment conducive to writing integration t
     * Cucumber
     * … testing framework xyz
 ```
+
 ---
 
-## todo: Spring Kafka
+<ContainImage src='./assets/streams-topology.png' />
 
-// add notes on the spring kafka lib
+---
+
+## [Kafka Streams Test Utils](https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams-test-utils)
+
+* TopologyTestDriver
+* OutputVerifier
+* Supports punctuations (manually advance wall clock time)
+* Direct access to state stores
+
+```notes
+https://kafka.apache.org/11/documentation/streams/developer-guide/testing.html
+
+* pipe data through Topology (PAPI or Streams DSL)
+* simulates the library runtime that continuously fetches records from input topics and processes them by traversing the topology. 
+* use to verify topology computes correct output. very functional.
+* captures the results records and allows to query its embedded state stores.
+* OutputVerifier - assert on portions of output record
+```
 
 ---
 
@@ -263,31 +281,21 @@ There are a few ways to set up an environment conducive to writing integration t
 
 ---
 
-## todo: Embedded Kafka
+## [Spring Kafka Test](https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka-test)
 
-// show what embedded kafka sets up for you
+* Embedded Kafka
+* Embedded ZooKeeper
+* KafkaTestUtils
+* [No Schema Registry Support](https://objectpartners.com/2018/08/21/testing-with-spring-kafka-and-mockschemaregistryclient)
 
----
+```notes
+* `spring.embedded.kafka.brokers` set to broker address 
+* broker count, topics, partitions, other props
+* `spring.embedded.zookeeper.connect` set to zk address
+* KafkaTestUtils - client configuration helpers
 
-## todo: Streams App
-
-// insert a slide showing a stream application to be tested
-
----
-
-## todo: test types
-
-// insert test slides showing different test types
-
-- show topology driver on each stream
-- show inspecting ktable state
-- show end to end with embedded kafka
----
-
-## todo: mock schema registry
-
-// show mock schema registry setup and point to blog
-
+https://github.com/spring-projects/spring-kafka/blob/master/src/reference/asciidoc/testing.adoc
+```
 ---
 
 <ContainImage src='./assets/4-pyramid-e2e.png' />
