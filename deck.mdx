@@ -5,6 +5,7 @@ import { Image } from 'mdx-deck'
 import { HalfImage, ContainImage } from './components/image'
 import Emoji from './components/emoji'
 import { Invert, Split, SplitRight } from 'mdx-deck/layouts'
+import { default as StyledSurfer } from './components/styledsurfer'
 
 export { default as theme } from './theme'
 
@@ -96,7 +97,7 @@ export default Invert
 - Unit tests are reliable. Simple systems and small units in general tend to suffer much less from flakiness. Furthermore, best practices for unit testing - in particular practices related to hermetic tests - will remove flakiness entirely. 
 - Unit tests isolate failures. Even if a product contains millions of lines of code, if a unit test fails, you only need to search that small unit under test to find the bug. 
 - hermetic testing - each test should be completely independent and self-sufficient
-
+- unit tests should be a specification for the code that other engineers can use in the future to reverse engineer
 **so why is it so hard to get those tests written? writing tests should be the easy part!
   - the part that makes or breaks your tests is... you guessed it, writing testable code
 ```
@@ -110,6 +111,7 @@ export default Invert
     { range: [ 1,  23] },
     { range: [5, 8], notes: "Setup sut with mock(s)"},
     { range: [10, 22], notes: "A readable test structure"},
+    { lines: [10], notes: "A clear test title"},
     { range: [11, 12], notes: "Given some condition(s)"},
     { range: [14, 15], notes: "When an action is performed"},
     { range: [17, 18], notes: "Then this thing should happen"},
@@ -120,6 +122,13 @@ export default Invert
 
 ```notes
 http://spockframework.org/spock/docs/1.2/spock_primer.html
+
+* Groovy - less verbose than Java
+* Additional syntax features designed for testing
+* Integrated stubbing and mocking
+* Easy parametrized testing
+* Labels for all phases of a test (given,when,then…)
+* Many more!
 ```
 
 ---
@@ -160,9 +169,15 @@ https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters
     { range: [14, 19], notes: "Injected services"},
     { range: [12, 13], notes: "This service is available for injection!"},
     { tokens: { 21: [ 11 ] }, notes: "Remove nondeterminism" },
-    { lines: [23], notes: "A utility you can mock" }
+    { lines: [23], notes: "A utility you can mock" },
+    { range: [12, 27] }
   ]}
 />
+
+```notes
+if we can tackle cleaning up code and removing the hard dependencies (static) then
+testing all the sudden becomes much easier and dare I say.... fun?
+```
 
 ---
 
@@ -171,7 +186,7 @@ https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters
 ---
 export default Invert
 
-> Isolated code might not be cohesive.
+> Isolated Code != Cohesive Code
 
 ```notes
 Unit tests do have one major disadvantage: 
@@ -200,8 +215,9 @@ test how things work together.
 ## Testing Kafka
 * Manual
 * Docker Compose / Confluent Platform
-* Kafka Streams Test Utils
-* Spring Kafka Test
+* Kafka Streams Test Utils*
+* Spring Kafka Test (Embedded Kafka)*
+* Others
 
 ```notes
 There are a few ways to set up an environment conducive to writing integration tests, and although I’m only highlighting my preferred method there are pros/cons to whichever your team might land on so be sure to have those conversations and understand what you’re committing to before you actually do.
@@ -231,7 +247,7 @@ There are a few ways to set up an environment conducive to writing integration t
 
 * TopologyTestDriver
 * OutputVerifier
-* Supports punctuations (manually advance wall clock time)
+* Supports punctuations
 * Direct access to state stores
 
 ```notes
@@ -240,8 +256,10 @@ https://kafka.apache.org/11/documentation/streams/developer-guide/testing.html
 * pipe data through Topology (PAPI or Streams DSL)
 * simulates the library runtime that continuously fetches records from input topics and processes them by traversing the topology. 
 * use to verify topology computes correct output. very functional.
+* punctuation testing - manually advance wall clock time
 * captures the results records and allows to query its embedded state stores.
 * OutputVerifier - assert on portions of output record
+* manipulate state stores before and after tests
 ```
 
 ---
@@ -278,6 +296,51 @@ https://kafka.apache.org/11/documentation/streams/developer-guide/testing.html
     { range: [80, 84] }
   ]}
 />
+
+---
+
+<CodeSurfer
+  code={require("raw-loader!./snippets/stream.java")}
+  language="java"
+  title="Delivery Notifications Stream"
+  steps={[
+    { range: [1,  42] },
+    { range: [3, 9], notes: "All dependencies are injected"},
+    { range: [10, 17], notes: "Stream begins with records from PACKAGE_EVENTS topic"},
+    { range: [18, 19], notes: "Filter out the DELIVERED messages"},
+    { lines: [20], notes: "Rekey topic by user id so KTable join can happen"},
+    { range: [21, 30], notes: "Join to the users table by user id"},
+    { range: [23, 28], notes: "Output of join is a Notification"},
+    { range: [32, 38], notes: "Send all Notifications to DELIVERY_NOTIFICATIONS topic"},
+    { range: [10, 40] }
+  ]}
+/>
+
+---
+<StyledSurfer fontSize={20}>
+  <CodeSurfer
+    code={require("raw-loader!./snippets/streamspec.groovy")}
+    language="groovy"
+    title="Stream Specs - Topology Driver"
+    steps={[
+      { range: [1,  87] },
+      { range: [9, 22], notes: "Configure test driver"},
+      { range: [23, 30], notes: "Setup KTable with data before tests"},
+      { range: [31, 50], notes: "Delivery Notification published to end topic"},
+      { range: [32, 36], notes: "Given a DELIVERED package event"},
+      { range: [38, 39], notes: "When sending it through the topology"},
+      { range: [41, 49], notes: "Then a delivery notification is on the target topic"},
+      { range: [52, 70], notes: "Delivery Notification NOT published to end topic"},
+      { range: [53, 57], notes: "Given an UNLOADED package event"},
+      { range: [59, 60], notes: "When sending it through the topology"},
+      { range: [62, 69], notes: "Then a notification is not on the target topic"},
+      { range: [72, 91], notes: "Notification not sent to target topic (no join match)"},
+      { range: [73, 77], notes: "Given a DELIVERED package event"},
+      { range: [79, 80], notes: "When sending it through the topology"},
+      { range: [82, 89], notes: "Then a notification is not on the target topic"}
+    ]}
+  />
+</StyledSurfer>
 
 ---
 
