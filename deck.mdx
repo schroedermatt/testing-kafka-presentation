@@ -241,6 +241,37 @@ There are a few ways to set up an environment conducive to writing integration t
 
 <ContainImage src='./assets/streams-topology.png' />
 
+```notes
+Topologies:
+   Sub-topology: 0
+    Source: KSTREAM-SOURCE-0000000007 (topics: [KSTREAM-KEY-SELECT-0000000004-repartition])
+      --> KSTREAM-JOIN-0000000008
+    Processor: KSTREAM-JOIN-0000000008 (stores: [users])
+      --> KSTREAM-SINK-0000000009
+      <-- KSTREAM-SOURCE-0000000007
+    Source: KSTREAM-SOURCE-0000000000 (topics: [user-updates])
+      --> KTABLE-SOURCE-0000000001
+    Sink: KSTREAM-SINK-0000000009 (topic: delivery-notifications)
+      <-- KSTREAM-JOIN-0000000008
+    Processor: KTABLE-SOURCE-0000000001 (stores: [users])
+      --> none
+      <-- KSTREAM-SOURCE-0000000000
+
+  Sub-topology: 1
+    Source: KSTREAM-SOURCE-0000000002 (topics: [package-events])
+      --> KSTREAM-FILTER-0000000003
+    Processor: KSTREAM-FILTER-0000000003 (stores: [])
+      --> KSTREAM-KEY-SELECT-0000000004
+      <-- KSTREAM-SOURCE-0000000002
+    Processor: KSTREAM-KEY-SELECT-0000000004 (stores: [])
+      --> KSTREAM-FILTER-0000000006
+      <-- KSTREAM-FILTER-0000000003
+    Processor: KSTREAM-FILTER-0000000006 (stores: [])
+      --> KSTREAM-SINK-0000000005
+      <-- KSTREAM-KEY-SELECT-0000000004
+    Sink: KSTREAM-SINK-0000000005 (topic: KSTREAM-KEY-SELECT-0000000004-repartition)
+      <-- KSTREAM-FILTER-0000000006
+```
 ---
 
 ## [Kafka Streams Test Utils](https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams-test-utils)
