@@ -245,23 +245,17 @@ There are a few ways to set up an environment conducive to writing integration t
 import ImageMapper from 'react-image-mapper'
 const IMAGE_SRC = './assets/streams-topology.png'
 const AREAS_MAP = {
-  name: 'topology-map',
+  name: 'streams-topology-map',
   areas: [
-    { shape: 'rect', coords: [514,244,251,93] },
-    { shape: 'circle', coords: [374,554,152] },
-    { shape: 'circle', coords: [379,995,157] },
-    { shape: 'circle', coords: [378,1481,173] },
-    { shape: 'circle', coords: [384,1978,147] },
-    { shape: 'circle', coords: [381,2422,147] },
-    { shape: 'poly', coords: [1120,253,1124,603,1462,598,1460,265] },
-    { shape: 'poly', coords: [1706,348,1712,518,1935,507,1939,354] },
-    { shape: 'circle', coords: [1284,915,156] },
-    { shape: 'circle', coords: [1827,923,160] },
-    { shape: 'circle', coords: [1290,1366,161] },
-    { shape: 'circle', coords: [1822,1358,153] },
-    { shape: 'rect', coords: [2109,1736,2328,1870] },
-    { shape: 'circle', coords: [1288,1804,148] },
-    { shape: 'rect', coords: [1127,2088,1460,2254] },
+    { shape: 'poly', coords: [81,50,67,87,67,114,72,139,260,137,284,113,289,85,284,50,135,49] },
+    { shape: 'poly', coords: [81,286,68,318,62,348,64,367,74,379,265,378,286,342,284,310,279,290] },
+    { shape: 'rect', coords: [399,19,585,166] },
+    { shape: 'poly', coords: [387,261,399,402,593,400,580,254] },
+    { shape: 'poly', coords: [693,17,715,164,897,160,883,21] },
+    { shape: 'poly', coords: [739,261,737,277,751,286,760,374,933,363,918,272,920,254,859,236,805,235,769,245] },
+    { shape: 'poly', coords: [1017,11,1028,174,1214,175,1212,12] },
+    { shape: 'poly', coords: [1025,227,1041,389,1220,376,1203,218,1117,218] },
+    { shape: 'poly', coords: [1047,508,1037,548,1034,583,1044,603,1102,599,1230,601,1254,569,1254,529,1252,509] }
   ]
 }
 
@@ -269,10 +263,10 @@ const AREAS_MAP = {
   src={IMAGE_SRC} 
   map={AREAS_MAP}
   fillColor={'rgba(255,255,255,0)'}
-  strokeColor={'rgb(225,43,46)'}
-  lineWidth={3}
-  width={600}
-  imgWidth={2402} />
+  strokeColor={'rgb(255,230,103)'}
+  lineWidth={4}
+  width={1200}
+  imgWidth={1269} />
 
 ```notes
 Topologies:

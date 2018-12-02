@@ -1,7 +1,7 @@
 import React from "react"
 import styled from 'styled-components'
 // import { TwitterIcon, LinkedinIcon, GithubIcon } from "react-icons/fa";
-
+import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 const PersonWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -40,8 +40,8 @@ const Social = styled.a`
   font-weight: 200;
   color: #333 !important;
 
-  &.icon {
-    margin-right: 0.25rem;
+  & > svg {
+    margin-right: 0.25em;
   }
 `
 
@@ -68,8 +68,7 @@ export default function Person({
             target="_blank"
             rel="noopener"
           >
-            {/* <GithubIcon className="icon" color="#1da1f2" /> */}
-            @{github}
+            <FaGithub className="icon" color="#171515" />{github}
           </Social>
         )}
         {linkedin && (
@@ -78,8 +77,7 @@ export default function Person({
             target="_blank"
             rel="noopener"
           >
-            {/* <LinkedinIcon className="icon" color="#1da1f2" / */}
-            @{linkedin}
+            <FaLinkedin className="icon" color="#0077B5" />{linkedin}
           </Social>
         )}
         {twitter && (
@@ -88,8 +86,7 @@ export default function Person({
             target="_blank"
             rel="noopener"
           >
-            {/* <TwitterIcon className="icon" color="#1da1f2" /> */}
-            @{twitter}
+            <FaTwitter className="icon" color="#38A1F3" />{twitter}
           </Social>
         )}
       </div>
