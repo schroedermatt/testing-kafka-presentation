@@ -102,23 +102,24 @@ export default Invert
   - the part that makes or breaks your tests is... you guessed it, writing testable code
 ```
 ---
-
-<CodeSurfer
-  code={require("raw-loader!./snippets/spock-test.groovy")}
-  language="groovy"
-  title="Spock to the Rescue!"
-  steps={[
-    { range: [ 1,  23] },
-    { range: [5, 8], notes: "Setup sut with mock(s)"},
-    { range: [10, 22], notes: "A readable test structure"},
-    { lines: [10], notes: "A clear test title"},
-    { range: [11, 12], notes: "Given some condition(s)"},
-    { range: [14, 15], notes: "When an action is performed"},
-    { range: [17, 18], notes: "Then this thing should happen"},
-    { range: [20, 21], notes: "And this should also be true"},
-    { range: [10, 22]}
-  ]}
-/>
+<StyledSurfer fontSize={24}>
+  <CodeSurfer
+    code={require("raw-loader!./snippets/spock-test.groovy")}
+    language="groovy"
+    title="Spock to the Rescue!"
+    steps={[
+      { range: [ 1,  23] },
+      { range: [5, 8], notes: "Setup sut with mock(s)"},
+      { range: [10, 22], notes: "A readable test structure"},
+      { lines: [10], notes: "A clear test title"},
+      { range: [11, 12], notes: "Given some condition(s)"},
+      { range: [14, 15], notes: "When an action is performed"},
+      { range: [17, 18], notes: "Then this thing should happen"},
+      { range: [20, 21], notes: "And this should also be true"},
+      { range: [10, 22]}
+    ]}
+  />
+</StyledSurfer>
 
 ```notes
 http://spockframework.org/spock/docs/1.2/spock_primer.html
@@ -156,23 +157,26 @@ https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters
 
 ---
 
-<CodeSurfer
-  code={require("raw-loader!./snippets/untestable.groovy")}
-  language="groovy"
-  title="Example"
-  steps={[
-    { range: [ 1,  10] },
-    { lines: [3], notes: "Instantiated class" },
-    { lines: [4], notes: "Nondeterministic functionality" },
-    { lines: [6], notes: "A handy util" },
-    { range: [12, 28], notes: "An alternative"},
-    { range: [14, 19], notes: "Injected services"},
-    { range: [12, 13], notes: "This service is available for injection!"},
-    { tokens: { 21: [ 11 ] }, notes: "Remove nondeterminism" },
-    { lines: [23], notes: "A utility you can mock" },
-    { range: [12, 27] }
-  ]}
-/>
+<StyledSurfer fontSize={24}>
+  <CodeSurfer
+    code={require("raw-loader!./snippets/untestable.groovy")}
+    language="groovy"
+    title="Example"
+    steps={[
+      { range: [ 1,  10] },
+      { lines: [3], notes: "Instantiated class" },
+      { lines: [4], notes: "Nondeterministic functionality" },
+      { lines: [6], notes: "A handy util" },
+      { range: [12, 28], notes: "An alternative"},
+      { range: [14, 19], notes: "Injected dependencies"},
+      { range: [12, 13], notes: "This service is available for injection itself!"},
+      { lines: [21], notes: "Pass nondeterministic values as params" },
+      { tokens: { 21: [ 11 ] }, notes: "...like dates" },
+      { lines: [23], notes: "A utility you can mock" },
+      { range: [12, 27] }
+    ]}
+  />
+</StyledSurfer>
 
 ```notes
 if we can tackle cleaning up code and removing the hard dependencies (static) then
@@ -212,7 +216,7 @@ test how things work together.
 ```
 ---
 
-## Testing Kafka
+## Kafka Testing Approaches
 * Manual
 * Docker Compose / Confluent Platform
 * Kafka Streams Test Utils*
@@ -324,16 +328,18 @@ https://kafka.apache.org/11/documentation/streams/developer-guide/testing.html
 
 ---
 
-<CodeSurfer
-  code={require("raw-loader!./snippets/ktable.java")}
-  language="java"
-  title="Users KTable"
-  steps={[
-    { range: [ 1,  16] },
-    { range: [5, 6], notes: "Look familiar? Inject instead of instantiate"},
-    { range: [8, 14], notes: "Records from user-updates go into users ktable"}
-  ]}
-/>
+<StyledSurfer fontSize={22}>
+  <CodeSurfer
+    code={require("raw-loader!./snippets/ktable.java")}
+    language="java"
+    title="Users KTable"
+    steps={[
+      { range: [ 1,  16] },
+      { range: [4, 6], notes: "Look familiar? Inject instead of instantiate"},
+      { range: [8, 14], notes: "Records from 'user-updates' go into 'users' ktable"}
+    ]}
+  />
+</StyledSurfer>
 
 ---
 <StyledSurfer fontSize={24}>
@@ -399,6 +405,7 @@ https://kafka.apache.org/11/documentation/streams/developer-guide/testing.html
       { range: [52, 70] },
       { range: [72, 91], notes: "Notification not sent to target topic (no join match)"},
       { range: [73, 77], notes: "Given a DELIVERED package event"},
+      { tokens: { 74: [5] }, notes: "With a different user id"},
       { range: [79, 80], notes: "When sending it through the topology"},
       { range: [82, 89], notes: "Then a notification is not on the target topic"},
       { range: [72, 91] },
@@ -428,7 +435,7 @@ https://github.com/spring-projects/spring-kafka/blob/master/src/reference/asciid
   <CodeSurfer
       code={require("raw-loader!./snippets/ktable-embedded-spec.groovy")}
       language="groovy"
-      title="KTable Spec - EmbeddedKafka"
+      title="KTable Spec w/Embedded Kafka"
       steps={[
         { range: [1,  31] },
         { range: [1, 7], notes: "Normal Spock integration test with @EmbeddedKafka"},
@@ -456,7 +463,7 @@ https://github.com/spring-projects/spring-kafka/blob/master/src/reference/asciid
   <CodeSurfer
       code={require("raw-loader!./snippets/stream-embedded-spec.groovy")}
       language="groovy"
-      title="Full Streams Embedded Spec"
+      title="Streams Spec w/Embedded Kafka"
       steps={[
         { range: [1, 83] },
         { range: [8, 22], notes: "An alternative to @EmbeddedKafka" },
@@ -465,7 +472,7 @@ https://github.com/spring-projects/spring-kafka/blob/master/src/reference/asciid
         { range: [29, 36], notes: "" },
         { range: [38, 39], notes: "" },
         { range: [41, 46], notes: "" },
-        { range: [49, 54], notes: "" },
+        { range: [48, 54], notes: "" },
         { range: [24, 55], notes: "" },
         { range: [57, 82], notes: "" },
         { range: [62, 69], notes: "" },
@@ -473,7 +480,7 @@ https://github.com/spring-projects/spring-kafka/blob/master/src/reference/asciid
         { range: [71, 72], notes: "" },
         { range: [74, 81], notes: "" },
         { range: [57, 82], notes: "" },
-        { range: [86, 104], notes: "" },
+        { range: [86, 104], notes: "Testing util to reuse consumer logic" },
         
       ]}
     />
@@ -510,6 +517,7 @@ https://github.com/spring-projects/spring-kafka/blob/master/src/reference/asciid
 <ContainImage src='./assets/4-pyramid-e2e.png' />
 
 ---
+export default Invert
 
 ## When to go E2E?
 
@@ -562,6 +570,12 @@ If you were at the SFO summit, there was a great talk on chaos engineering your 
 ```
 ---
 
-<https://github.com/msschroe3/testing-kafka-presentation>
+# Questions?
 
-<https://github.com/msschroe3/spring-kafka-samples>
+---
+export default Invert
+
+# Thanks!
+
+* <http://bit.ly/testing-kafka-deck>
+* <http://bit.ly/spring-kafka-samples>

@@ -6,7 +6,7 @@ public class UserTable {
 		StreamsBuilder streamsBuilder) {
 
 		return streamsBuilder.table(
-			"user-updates", // topic
+			Topic.USER_UPDATES,
 			Materialized.<Integer, User, KeyValueStore<Bytes, byte[]>>
 				as("users") // ktable name
 					.withKeySerde(Serdes.Integer())

@@ -18,7 +18,7 @@ Serde<PackageEvent> packageEventSerde(KafkaProperties props) {
 KafkaAvroSerializer kafkaAvroSerializer(KafkaProperties props) {
   return new KafkaAvroSerializer(
     mockClient(), 
-    props.buildConsumerProperties()
+    props.buildProducerProperties()
   )
 }
 

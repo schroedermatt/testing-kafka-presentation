@@ -32,7 +32,7 @@ class DeliveryNotificationEmbeddedSpec extends Specification {
       .setEventId(1)
       .setUserId(user.userId)
       .setPackageId(345)
-      .setEventType('DELIVERED')
+      .setEventType(EventType.DELIVERED)
       .build()
 
     when: 'publishing the event'
@@ -40,7 +40,7 @@ class DeliveryNotificationEmbeddedSpec extends Specification {
 
     then: 'notification is sent to topic'
     List<Notification> notifications = readValues(
-      'delivery-notifications',
+      Topic.DELIVERY_NOTIFICATIONS,
       notificationConsumer,
       maxMessages
     )
@@ -65,7 +65,7 @@ class DeliveryNotificationEmbeddedSpec extends Specification {
       .setEventId(1)
       .setUserId(user.userId)
       .setPackageId(345)
-      .setEventType('UNLOADED')
+      .setEventType(EventType.UNLOADED)
       .build()
 
     when: 'publishing the event'
@@ -73,7 +73,7 @@ class DeliveryNotificationEmbeddedSpec extends Specification {
 
     then: 'notification is NOT sent to topic'
     List<Notification> notifications = readValues(
-      'delivery-notifications',
+      Topic.DELIVERY_NOTIFICATIONS,
       notificationConsumer,
       maxMessages
     )
