@@ -336,48 +336,49 @@ https://kafka.apache.org/11/documentation/streams/developer-guide/testing.html
 />
 
 ---
-
-<CodeSurfer
-  code={require("raw-loader!./snippets/ktablespec.groovy")}
-  language="groovy"
-  title="Users KTable Spec - Topology Driver"
-  steps={[
-    { range: [ 1,  29] },
-    { range: [8, 14], notes: "Configure a serde utilizing the MockSchemaRegistryClient"},
-    { range: [16, 19], notes: "Setup a record factory for tests to use"},
-    { range: [21, 29], notes: "Configure StreamBuilder and TopologyTestDriver"},
-    { range: [32, 56], notes: "Test 1: Published record ends up in ktable"},
-    { range: [33, 45] },
-    { range: [47, 48] },
-    { range: [50, 55] },
-    { range: [58, 85], notes: "Test 2: Update an existing ktable entry"},
-    { range: [59, 67] },
-    { range: [69, 78] },
-    { range: [80, 84] }
-  ]}
-/>
+<StyledSurfer fontSize={24}>
+  <CodeSurfer
+    code={require("raw-loader!./snippets/ktablespec.groovy")}
+    language="groovy"
+    title="Users KTable Spec - Topology Driver"
+    steps={[
+      { range: [ 1,  29] },
+      { range: [8, 14], notes: "Configure a serde utilizing the MockSchemaRegistryClient"},
+      { range: [16, 19], notes: "Setup a record factory for tests to use"},
+      { range: [21, 29], notes: "Configure StreamBuilder and TopologyTestDriver"},
+      { range: [32, 56], notes: "Test 1: Published record ends up in ktable"},
+      { range: [33, 45] },
+      { range: [47, 48] },
+      { range: [50, 55] },
+      { range: [58, 85], notes: "Test 2: Update an existing ktable entry"},
+      { range: [59, 67] },
+      { range: [69, 78] },
+      { range: [80, 84] }
+    ]}
+  />
+</StyledSurfer>
+---
+<StyledSurfer fontSize={24}>
+  <CodeSurfer
+    code={require("raw-loader!./snippets/stream.java")}
+    language="java"
+    title="Delivery Notifications Stream"
+    steps={[
+      { range: [1, 35] },
+      { range: [1, 7], notes: "All dependencies are injected"},
+      { range: [8, 12], notes: "Stream begins with records from PACKAGE_EVENTS topic"},
+      { lines: [13], notes: "Filter out the DELIVERED messages"},
+      { lines: [14], notes: "Rekey topic by user id so KTable join can happen"},
+      { range: [15, 24], notes: "Join to the users table by user id"},
+      { range: [17, 22], notes: "Output of join is a Notification"},
+      { range: [26, 32], notes: "Send all Notifications to DELIVERY_NOTIFICATIONS topic"},
+      { range: [1, 35] }
+    ]}
+  />
+</StyledSurfer>
 
 ---
-
-<CodeSurfer
-  code={require("raw-loader!./snippets/stream.java")}
-  language="java"
-  title="Delivery Notifications Stream"
-  steps={[
-    { range: [1,  42] },
-    { range: [3, 9], notes: "All dependencies are injected"},
-    { range: [10, 17], notes: "Stream begins with records from PACKAGE_EVENTS topic"},
-    { range: [18, 19], notes: "Filter out the DELIVERED messages"},
-    { lines: [20], notes: "Rekey topic by user id so KTable join can happen"},
-    { range: [21, 30], notes: "Join to the users table by user id"},
-    { range: [23, 28], notes: "Output of join is a Notification"},
-    { range: [32, 38], notes: "Send all Notifications to DELIVERY_NOTIFICATIONS topic"},
-    { range: [10, 40] }
-  ]}
-/>
-
----
-<StyledSurfer fontSize={20}>
+<StyledSurfer fontSize={23}>
   <CodeSurfer
     code={require("raw-loader!./snippets/streamspec.groovy")}
     language="groovy"
@@ -390,14 +391,17 @@ https://kafka.apache.org/11/documentation/streams/developer-guide/testing.html
       { range: [32, 36], notes: "Given a DELIVERED package event"},
       { range: [38, 39], notes: "When sending it through the topology"},
       { range: [41, 49], notes: "Then a delivery notification is on the target topic"},
+      { range: [31, 50] },
       { range: [52, 70], notes: "Delivery Notification NOT published to end topic"},
       { range: [53, 57], notes: "Given an UNLOADED package event"},
       { range: [59, 60], notes: "When sending it through the topology"},
       { range: [62, 69], notes: "Then a notification is not on the target topic"},
+      { range: [52, 70] },
       { range: [72, 91], notes: "Notification not sent to target topic (no join match)"},
       { range: [73, 77], notes: "Given a DELIVERED package event"},
       { range: [79, 80], notes: "When sending it through the topology"},
-      { range: [82, 89], notes: "Then a notification is not on the target topic"}
+      { range: [82, 89], notes: "Then a notification is not on the target topic"},
+      { range: [72, 91] },
     ]}
   />
 </StyledSurfer>
@@ -420,16 +424,86 @@ https://kafka.apache.org/11/documentation/streams/developer-guide/testing.html
 https://github.com/spring-projects/spring-kafka/blob/master/src/reference/asciidoc/testing.adoc
 ```
 ---
+<StyledSurfer fontSize={26}>
+  <CodeSurfer
+      code={require("raw-loader!./snippets/ktable-embedded-spec.groovy")}
+      language="groovy"
+      title="KTable Spec - EmbeddedKafka"
+      steps={[
+        { range: [1,  31] },
+        { range: [1, 7], notes: "Normal Spock integration test with @EmbeddedKafka"},
+        { range: [8, 9], notes: "StreamsBuilderFactoryBean has access to the underlying streams instance"},
+        { range: [14, 30], notes: "Publish a message and verify it is stored in KTable"},
+        { range: [15, 17], notes: "Build a user Avro object"},
+        { range: [19, 20], notes: "Publish the user to the topic that is dumped into the KTable"},
+        { range: [22, 29], notes: "Query the state store"},
+        { lines: [23], notes: "Grab the streams instance"},
+        { tokens: { 24: [8,9,10] }, notes: "Get the 'users' state store" },
+        { range: [24, 27], notes: "Get store by name and type" },
+        { lines: [29], notes: "Assert user is in the state store" },
+        { range: [22, 29] },
+        { range: [1, 31] }
+      ]}
+    />
+</StyledSurfer>
 
-embedded ktable spec
-
+```notes
+- you may need "wait" logic until state store is ready for querying
+```
 ---
 
-embedded streams spec
-
+<StyledSurfer fontSize={22}>
+  <CodeSurfer
+      code={require("raw-loader!./snippets/stream-embedded-spec.groovy")}
+      language="groovy"
+      title="Full Streams Embedded Spec"
+      steps={[
+        { range: [1, 83] },
+        { range: [8, 22], notes: "An alternative to @EmbeddedKafka" },
+        { range: [24, 55], notes: "" },
+        { range: [25, 27], notes: "" },
+        { range: [29, 36], notes: "" },
+        { range: [38, 39], notes: "" },
+        { range: [41, 46], notes: "" },
+        { range: [49, 54], notes: "" },
+        { range: [24, 55], notes: "" },
+        { range: [57, 82], notes: "" },
+        { range: [62, 69], notes: "" },
+        { lines: [68], notes: "" },
+        { range: [71, 72], notes: "" },
+        { range: [74, 81], notes: "" },
+        { range: [57, 82], notes: "" },
+        { range: [86, 104], notes: "" },
+        
+      ]}
+    />
+</StyledSurfer>
 ---
 
-mock schema registry configuration
+<StyledSurfer fontSize={24}>
+  <CodeSurfer
+      code={require("raw-loader!./snippets/mock-serde.groovy")}
+      language="groovy"
+      title="Mock Serde Configuration"
+      steps={[
+        { range: [1, 31] },
+        { range: [1, 4] },
+        { range: [6, 15] },
+        { tokens: { 8: [6,7,8,9,10,11,12,13] } },
+        { tokens: { 
+          2: [0,1,2,3,4,5], 
+          3: [0,1,2,3,4,5,6,7], 
+          4: [1], 
+          8: [10,11,12] } 
+        },
+        { lines: [8] },
+        { range: [9,12] },
+        { range: [17, 23] },
+        { range: [25, 31] },
+        { range: [1, 31] }
+      ]}
+    />
+</StyledSurfer>
 
 ---
 
