@@ -109,7 +109,7 @@ export default Invert
     title="Spock to the Rescue!"
     steps={[
       { range: [ 1,  23] },
-      { range: [5, 8], notes: "Setup sut with mock(s)"},
+      { range: [2, 8], notes: "Setup sut with mock(s)"},
       { range: [10, 22], notes: "A readable test structure"},
       { lines: [10], notes: "A clear test title"},
       { range: [11, 12], notes: "Given some condition(s)"},
@@ -164,15 +164,16 @@ https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters
     title="Example"
     steps={[
       { range: [ 1,  10] },
-      { lines: [3], notes: "Instantiated class" },
+      { lines: [3, 5], notes: "Instantiated class used in the method" },
       { lines: [4], notes: "Nondeterministic functionality" },
       { lines: [6], notes: "A handy util" },
+      { range: [2, 9], notes: "All of this == hard to test" },
       { range: [12, 28], notes: "An alternative"},
       { range: [14, 19], notes: "Injected dependencies"},
       { range: [12, 13], notes: "This service is available for injection itself!"},
       { lines: [21], notes: "Pass nondeterministic values as params" },
       { tokens: { 21: [ 11 ] }, notes: "...like dates" },
-      { lines: [23], notes: "A utility you can mock" },
+      { lines: [23], notes: "The injected utility can be mocked" },
       { range: [12, 27] }
     ]}
   />
@@ -190,7 +191,7 @@ testing all the sudden becomes much easier and dare I say.... fun?
 ---
 export default Invert
 
-> Isolated Code != Cohesive Code
+> Decoupled Code != Cohesive Code
 
 ```notes
 Unit tests do have one major disadvantage: 
@@ -330,7 +331,10 @@ https://kafka.apache.org/11/documentation/streams/developer-guide/testing.html
     steps={[
       { range: [ 1,  16] },
       { range: [4, 6], notes: "Look familiar? Inject instead of instantiate"},
-      { range: [8, 14], notes: "Records from 'user-updates' go into 'users' ktable"}
+      { range: [8, 14], notes: "Records from 'user-updates' go into 'users' ktable"},
+      { lines: [9], notes: "Data is sourced from this topic"},
+      { range: [10, 13], notes: "And materialized into this KTable"},
+      { range: [3, 15] }
     ]}
   />
 </StyledSurfer>
@@ -343,9 +347,10 @@ https://kafka.apache.org/11/documentation/streams/developer-guide/testing.html
     title="Users KTable Spec - Topology Driver"
     steps={[
       { range: [ 1,  29] },
-      { range: [8, 14], notes: "Configure a serde utilizing the MockSchemaRegistryClient"},
+      { range: [7, 14], notes: "Configure a serde utilizing the MockSchemaRegistryClient"},
       { range: [16, 19], notes: "Setup a record factory for tests to use"},
-      { range: [21, 29], notes: "Configure StreamBuilder and TopologyTestDriver"},
+      { range: [21, 23], notes: "Configure StreamsBuilder by reference"},
+      { range: [25, 29], notes: "Instantiate a TopologyTestDriver"},
       { range: [32, 56], notes: "Test 1: Published record ends up in ktable"},
       { range: [33, 45] },
       { range: [47, 48] },
@@ -460,22 +465,24 @@ https://github.com/spring-projects/spring-kafka/blob/master/src/reference/asciid
       title="Streams Spec w/Embedded Kafka"
       steps={[
         { range: [1, 83] },
+        { range: [1, 2], notes: "No @EmbeddedKafka" },
         { range: [8, 22], notes: "An alternative to @EmbeddedKafka" },
-        { range: [24, 55], notes: "" },
-        { range: [25, 27], notes: "" },
-        { range: [29, 36], notes: "" },
+        { range: [16, 18], notes: "before() sets up instance and system props" },
+        { range: [20, 22], notes: "after() cleans everything up" },
+        { lines: [24], notes: "Test: Notification IS published" },
+        { range: [25, 27], notes: "Setup KTable with a user" },
+        { range: [29, 36], notes: "Create a DELIVERED PackageEvent" },
         { range: [38, 39], notes: "" },
-        { range: [41, 46], notes: "" },
-        { range: [48, 54], notes: "" },
+        { range: [41, 46], notes: "readValues is just polling values with given consumer" },
+        { range: [48, 54], notes: "result == expected notification" },
         { range: [24, 55], notes: "" },
         { range: [57, 82], notes: "" },
-        { range: [62, 69], notes: "" },
-        { lines: [68], notes: "" },
+        { lines: [57], notes: "Test: Notification is NOT published" },
+        { range: [62, 69], notes: "Create a PackageEvent" },
+        { lines: [68], notes: "with an UNLOADED EventType" },
         { range: [71, 72], notes: "" },
-        { range: [74, 81], notes: "" },
-        { range: [57, 82], notes: "" },
-        { range: [86, 104], notes: "Testing util to reuse consumer logic" },
-        
+        { range: [74, 81], notes: "No messages should be on the topic" },
+        { range: [57, 82], notes: "" }
       ]}
     />
 </StyledSurfer>
